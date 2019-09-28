@@ -21,18 +21,20 @@ def parse_args(argv):
     lastarg = None
     for arg in argv[1:]:
         if lastarg == '-p':
-            parsed['port'] = arg
+            parsed['port'] = int(arg)
             lastarg = None
         elif lastarg == None:
             if arg == '-p':
-                lastarg == arg
+                lastarg = arg
             elif arg == '-h' or arg == '-?':
                 usage(argv[0])
                 exit(0)
             else:
+                print("Unrecognized argument '{}'".format(arg))
                 usage(argv[0])
                 exit(1)
         else:
+            print("Unrecognized argument '{} {}'".format(lastarg, arg))
             usage(argv[0])
             exit(1)
     return parsed
@@ -41,6 +43,8 @@ def run_server():
     parsed_args = parse_args(argv)
     port = parsed_args['port']
     host = '' # all available interfaces
+
+    print("Running on port {}".format(port))
 
     sock = socket(AF_INET, SOCK_STREAM)
     sock.bind((host, port))
@@ -54,6 +58,10 @@ def run_server():
             if not data: break
             connection.send(b'Echo => ' + data)
         connection.close()
+        print('Closed connection to {}'.format(address))
 
 if __name__ == "__main__":
-    run_server()
+    try:
+        run_server()
+    except KeyboardInterrupt:
+        print("\nServer exiting now...")
