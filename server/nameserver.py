@@ -7,7 +7,7 @@
 from socket import socket, AF_INET, SOCK_STREAM
 from sys import argv
 
-DEFAULT_PORT = 2535
+DEFAULT_PORT = 8000
 
 def usage(progname):
     print("python {} [options]".format(progname))
